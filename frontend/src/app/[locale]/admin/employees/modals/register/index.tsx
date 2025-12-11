@@ -25,6 +25,7 @@ export default function RegisterEmployeeModal({ isOpen, setOpen }: Props) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) })
 
@@ -37,6 +38,7 @@ export default function RegisterEmployeeModal({ isOpen, setOpen }: Props) {
       toast.success(t("Employees.modals.register.success"))
       addEmployee(employee)
     })
+    reset()
   }
 
   return (
@@ -62,7 +64,7 @@ export default function RegisterEmployeeModal({ isOpen, setOpen }: Props) {
             text={t("Employees.modals.register.cancel")}
             backgroundHover={false}
           />
-          <FormFields.Button text={t("Employees.modals.register.submit")} onClickFn={handleSubmit(onSubmit)} />
+          <FormFields.Button text={t("Employees.modals.register.submit")} />
         </div>
       </form>
     </Modal>

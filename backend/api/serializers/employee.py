@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.views.employee import Employee
+from api.models.employee import Employee
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:

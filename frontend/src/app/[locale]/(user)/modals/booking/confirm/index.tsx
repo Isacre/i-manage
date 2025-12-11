@@ -59,7 +59,7 @@ export default function ConfirmingBooking({ Booking, onClose }: Props) {
   return (
     <div className="space-y-6">
       <h2 className="text-center text-2xl font-bold text-gray-900">
-        {t(`Time.DaysOfWeek.${dayOfWeek}`)}, {day} de {t(`Time.Months.${String(Number(month))}`)} de {year}
+        {t(`Time.DaysOfWeek.${dayOfWeek}`)}, {day} de {t(`Time.Months.${String(Number(month) - 1)}`)} de {year}
       </h2>
 
       {isLoading ? (

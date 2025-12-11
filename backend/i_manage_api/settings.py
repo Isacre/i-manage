@@ -14,12 +14,6 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env.bool("DEBUG")
 ALLOWED_HOSTS = ["*"]
 
-
-DATABASE_PORT = env.str("DATABASE_PORT")
-DATABASE_NAME = env("DATABASE_NAME")
-DATABASE_USER = env("DATABASE_USER")
-DATABASE_PASS = env("DATABASE_PASS")
-DATABASE_HOST = env("DATABASE_HOST")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
@@ -75,11 +69,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'i_manage_api.wsgi.application'
 
 
-if env("DATABASE_URL"):
-    DATABASES = {
-        "default": dj_database_url.config(default=env("DATABASE_URL"))
-    }
-else:
+""" if env("DATABASE_URL"): """
+""" else:
     DATABASES = {
         "default": {        
             "ENGINE": "django.db.backends.postgresql",
@@ -89,7 +80,11 @@ else:
             "HOST": DATABASE_HOST,
             "PORT": DATABASE_PORT,
         }
-    }
+    } """
+DATABASES = {
+    "default": dj_database_url.config(default=env("DATABASE_URL"))
+}
+
 AUTH_USER_MODEL = "users.User"
 
 AUTH_PASSWORD_VALIDATORS = [

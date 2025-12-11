@@ -11,6 +11,7 @@ from .views import (
     files,
 )
 from rest_framework import permissions
+from users.views import CustomUserViewSet
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -59,6 +60,7 @@ router.register(
 
 urlpatterns = [
     path("", include(router.urls)),
+    path('auth/users/', CustomUserViewSet.as_view({'post': 'create'}), name='user-create'),
     re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.jwt')),
 ]

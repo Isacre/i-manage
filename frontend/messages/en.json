@@ -239,14 +239,18 @@
           "name": "Name",
           "email": "Email",
           "cancel": "Cancel",
-          "submit": "Submit"
+          "submit": "Submit",
+          "success": "Employee registered successfully",
+          "error": "Error registering employee"
         },
         "edit": {
           "title": "Edit Employee",
           "name": "Name",
           "email": "Email",
           "cancel": "Cancel",
-          "submit": "Submit"
+          "submit": "Submit",
+          "success": "Employee updated successfully",
+          "error": "Error updating employee"
         },
         "delete": {
           "title": "Delete Employee",

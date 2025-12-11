@@ -3,7 +3,11 @@ from django.conf import settings
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-def create_checkout_session(service_name: str, service_description: str, amount: int, customer_email: str, metadata: dict = {}):
+def create_checkout_session(store_identifier: str,service_name: str, service_description: str, amount: int, customer_email: str, metadata: dict = {}):
+    subroute = f"http://{store_identifier}.{settings.DOMAIN}"
+    print(subroute, "subroute")
+    print(settings.DOMAIN, "domain")
+   
     try:
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
@@ -20,8 +24,8 @@ def create_checkout_session(service_name: str, service_description: str, amount:
             }],
             mode="payment",
             customer_email=customer_email,
-            success_url=f"{settings.DOMAIN}/success?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"{settings.DOMAIN}/cancel",
+            success_url=f"{subroute}/bookings/success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{subroute}/bookings/cancel",
             metadata=metadata,
         )
         return session

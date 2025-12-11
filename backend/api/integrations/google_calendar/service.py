@@ -1,5 +1,4 @@
 import json
-import os.path
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -13,8 +12,6 @@ from api.models.service import Service
 from api.serializers.booking import BookingSerializer
 from api.serializers.service import ServiceSerializer
 from api.utils.utils import generateBookedHours
-
-
 from users.models import User
 
 load_dotenv()
@@ -56,7 +53,7 @@ def get_credentials():
             set_key(".env", "CALENDAR_TOKEN_EXPIRY", authentication.expiry.isoformat())
         else:
             flow = InstalledAppFlow.from_client_config(credentials_data, SCOPES)
-            authentication = flow.run_local_server(port=0)
+            authentication = flow.run_local_server(port=0, open_browser=False)
             set_key(".env", "CALENDAR_TOKEN", authentication.token)
             set_key(".env", "CALENDAR_REFRESH_TOKEN", authentication.refresh_token)
             set_key(".env", "CALENDAR_TOKEN_EXPIRY", authentication.expiry.isoformat())
@@ -103,13 +100,12 @@ def create_event(booking: Booking):
         )
         .execute()
     )
-    booking.calendar_event = created_event.get("id")
-    booking.save()
-    return created_event
-  
   except HttpError as error:
     print(f"An error occurred: {error}")
     raise error
+  booking.calendar_event = created_event.get("id")
+  booking.save()
+  return created_event
   
 def delete_event(booking: Booking):
   authentication = get_credentials()

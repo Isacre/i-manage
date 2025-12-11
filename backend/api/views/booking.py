@@ -14,9 +14,10 @@ import api.integrations.google_calendar.service as google_calendar
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from api.serializers.service import ServiceSerializer
-from api.utils.utils import  check_employee_availability, select_most_available_employee
+from api.utils.utils import  select_most_available_employee
 from payments.models import Payment
 from users.models import User
+from django.conf import settings
 
 class BookingViewSet(viewsets.ModelViewSet):
     serializer_class = BookingSerializer
@@ -46,7 +47,7 @@ class BookingViewSet(viewsets.ModelViewSet):
        data["user"] = user
        booking = Booking.objects.create(**data)
        booking.employees.set(employees)
-       session = create_checkout_session(service.name, service.description, service.price, user.email)
+       session = create_checkout_session(company.identifier, service.name, service.description, service.price, user.email)
        booking.session_id = session.id
        
        if serializer.is_valid(raise_exception=True): 
@@ -80,6 +81,12 @@ class BookingViewSet(viewsets.ModelViewSet):
         preferred_employee_parameter = request.GET.get("preferred_employee")
         service = Service.objects.get(pk=pk)
         capable_employees = ServiceSerializer(service).data.get("capable_employees")
+        if(len(capable_employees) == 0):
+            response = {
+                'available_slots': [],
+                'capable_employees': [],
+            }
+            return Response(response)
         if preferred_employee_parameter:
             capable_employees = [employee for employee in capable_employees if employee.get("id") == int(preferred_employee_parameter)]
 

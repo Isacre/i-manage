@@ -2,30 +2,36 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, phone, password=None):
+    def create_user(self, email, name, phone, password=None, company=None, role="CLIENT"):
         if not email:
             raise ValueError('O endereço de e-mail deve ser fornecido')
+
         user = self.model(
             email=self.normalize_email(email),
             name=name,
             phone=phone,
+            company=company,
+            role=role,
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name, phone, password=None, company=None, role="CLIENT"):
+    def create_superuser(self, email, name, phone, password=None, company=None, role="OWNER"):
         user = self.create_user(
-            email,
-            name,
-            phone,
+            email=email,
+            name=name,
+            phone=phone,
             password=password,
             company=company,
             role=role,
         )
         user.is_admin = True
+        user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
+
 
 class User(AbstractBaseUser):
     class Roles(models.TextChoices):
@@ -49,3 +55,4 @@ class User(AbstractBaseUser):
     
     class Meta:
         db_table = 'user'
+
