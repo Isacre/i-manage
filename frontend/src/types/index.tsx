@@ -25,6 +25,12 @@ export declare type ServiceLocation = "online" | "local"
 
 export declare type TimeUnit = "minutes" | "hours" | "days"
 
+export declare type DaySchedule = {
+  enabled: boolean
+  opens_at: string
+  closes_at: string
+}
+
 export declare type CompanyType = {
   id: number
   name: string
@@ -41,6 +47,7 @@ export declare type CompanyType = {
   identifier: string
   primary_color: string
   banner: string
+  schedule?: Record<string, DaySchedule>
 }
 
 export interface Service {

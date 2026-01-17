@@ -346,20 +346,42 @@
     "features": {
       "booking": {
         "title": "Dynamic Bookings",
-        "description": "Synchronize with Google Calendar, avoid conflicts and optimize your schedules automatically."
+        "description": "Synchronize with Google Calendar, avoid conflicts and optimize your schedules automatically and intelligently."
       },
       "team": {
         "title": "Team Management",
-        "description": "Associate professionals to services, control availability and distribute appointments efficiently."
+        "description": "Associate professionals to services, control availability and distribute appointments efficiently and organized."
+      },
+      "whiteLabel": {
+        "title": "White Label Platform",
+        "description": "Strengthen your company's online presence with your brand's proprietary website. Customize the visual identity and offer a unique experience to your customers."
       },
       "payment": {
         "title": "Integrated Payments",
         "description": "Receive by sessions with Stripe, control commissions by professional and follow the revenue."
       }
     },
+    "values": {
+      "menu": {
+        "title": "Virtual Menu",
+        "description": "Present all your services professionally and organized. Your clients can view prices, descriptions and availability in an elegant and easy-to-navigate digital menu."
+      },
+      "time": {
+        "title": "Time Savings",
+        "description": "Fully automate the booking process. The system manages schedules, avoids conflicts and optimizes your calendar automatically, freeing up your time to focus on what really matters."
+      },
+      "support": {
+        "title": "Reduce Time Loss",
+        "description": "Eliminate constant interruptions in service. Your clients find prices and available times instantly, without needing to call or send messages, drastically reducing time lost with questions."
+      },
+      "data": {
+        "title": "Data Exposure",
+        "description": "Keep all important information always visible: WhatsApp, address, business hours and much more. Your clients have quick access to everything they need in one place."
+      }
+    },
     "footer": {
       "title": "Ideal for small businesses and freelancers",
-      "subtitle": "iManage simplifies the management of bookings, from the registration of services to the check-in via QR Code. All this with a modern, responsive and accessible interface from anywhere.",
+      "subtitle": "iManage simplifies the management of bookings, from the registration of services to the check-in via QR Code. All this with a modern, responsive and accessible interface from anywhere. As a white label platform, it serves as your brand's proprietary website, offering a professional and personalized online presence.",
       "button": "I want to test now"
     }
   },

@@ -47,13 +47,17 @@ class BookingViewSet(viewsets.ModelViewSet):
        data["user"] = user
        booking = Booking.objects.create(**data)
        booking.employees.set(employees)
-       session = create_checkout_session(company.identifier, service.name, service.description, service.price, user.email)
-       booking.session_id = session.id
-       
+
+       # TODO: Uncomment this when payment becomes a thing 
+       # session = create_checkout_session(company.identifier, service.name, service.description, service.price, user.email)
+       # booking.session_id = session.id
+
+       # TODO: Uncomment this when we start using google calendar
+       #google_calendar.create_event(booking)
+
        if serializer.is_valid(raise_exception=True): 
-          google_calendar.create_event(booking)
           booking.save()
-          return Response({"sessionId": session.id, "url": session.url}, status=200)
+          return Response({"booking": BookingSerializer(booking).data}, status=200)
        return Response(serializer.errors, status={400})
 
     @swagger_auto_schema(
@@ -142,6 +146,6 @@ class BookingViewSet(viewsets.ModelViewSet):
     def deleteAgenda(self, request, pk=None):
         calendar_event = request.data.get("calendar_event")
         booking = Booking.objects.get(calendar_event=calendar_event)
-        google_calendar.delete_event(booking)
+       # google_calendar.delete_event(booking)
         return Response(BookingSerializer(booking).data, status=200)
     

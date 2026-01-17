@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import NavbarButton from "./Button"
 import { HeaderMenu } from "./navbar"
 import { cn } from "@/lib/utils"
@@ -11,9 +11,13 @@ interface Props {
   editMode?: boolean
 }
 export default function RightSide({ menus, editMode = false }: Props) {
-  const colorInputRef = useRef<HTMLInputElement>(null)
   const { update, company } = useCompanyStore()
   const [color, setColor] = useState(company?.primary_color)
+  const colorInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setColor(company?.primary_color)
+  }, [company?.primary_color])
 
   // Debounce the color change to avoid multiple updates on zustand
   useDebounce(
@@ -27,7 +31,7 @@ export default function RightSide({ menus, editMode = false }: Props) {
   return (
     <div onClick={() => editMode && colorInputRef.current?.click()} className="relative">
       <div className={cn("hidden items-center gap-2 md:flex", editMode && "pointer-events-none")}>
-        {editMode && <input ref={colorInputRef} type="color" onChange={(e) => setColor(e.target.value)} />}
+        {editMode && <input value={color} ref={colorInputRef} type="color" onChange={(e) => setColor(e.target.value)} />}
 
         {menus?.map((menu) => {
           if (menu.show !== false) {

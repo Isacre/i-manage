@@ -333,26 +333,48 @@
   },
   "About": {
     "header": "Agendamento inteligente para <bold>negócios inteligentes</bold>",
-    "description": "Organize horários, serviços e equipes de forma prática, integrada ao Google Agenda, com pagamentos e muito mais.",
+    "description": "Organize horários, serviços e equipes de forma prática",
     "button": "Comece Agora",
     "secondary_button": "Ver Demonstração",
     "features": {
       "booking": {
         "title": "Agendamentos Dinâmicos",
-        "description": "Sincronize com o Google Agenda, evite conflitos e otimize seus horários automaticamente."
+        "description": "Organize sua agenda, evite conflitos e otimize seus horários automaticamente de forma inteligente."
       },
       "team": {
         "title": "Gestão de Equipes",
-        "description": "Associe profissionais aos serviços, controle disponibilidade e distribua atendimentos com eficiência."
+        "description": "Associe profissionais aos serviços, controle disponibilidade e distribua atendimentos com eficiência e organização."
+      },
+      "whiteLabel": {
+        "title": "Plataforma White Label",
+        "description": "Fortaleça a presença online da sua empresa com um site com a sua marca como nome e identidade visual."
       },
       "payment": {
         "title": "Pagamentos Integrados",
         "description": "Receba por sessões com Stripe, controle comissões por profissional e acompanhe o faturamento."
       }
     },
+    "values": {
+      "menu": {
+        "title": "Cardápio Virtual",
+        "description": "Apresente todos os seus serviços de forma profissional e organizada. Seus clientes podem visualizar preços, descrições e disponibilidade em um cardápio digital elegante e fácil de navegar."
+      },
+      "time": {
+        "title": "Economia de Tempo",
+        "description": "Automatize completamente o processo de agendamentos. O sistema gerencia horários, evita conflitos e otimiza sua agenda automaticamente, liberando seu tempo para focar no que realmente importa."
+      },
+      "support": {
+        "title": "Atendimento instantâneo",
+        "description": "Evite que seus clientes fiquem sem atendimento. Seus clientes podem agendar agendamentos instantaneamente, sem precisar de agendar por telefone ou WhatsApp."
+      },
+      "data": {
+        "title": "Fácil manutenção",
+        "description": "Atualize facilmente seus preços, horários, serviços sem precisar contratar um desenvolvedor ou designer."
+      }
+    },
     "footer": {
       "title": "Ideal para pequenas empresas e profissionais autônomos",
-      "subtitle": "O iManage simplifica a gestão de agendamentos, desde o cadastro de serviços até o check-in via QR Code. Tudo isso com uma interface moderna, responsiva e acessível de qualquer lugar.",
+      "subtitle": "O iManage simplifica a gestão de agendamentos. Tudo isso com uma interface moderna, responsiva e acessível de qualquer lugar. Como plataforma white label, serve como site proprietário da sua marca, oferecendo uma presença online profissional e personalizada.",
       "button": "Quero testar agora"
     }
   },

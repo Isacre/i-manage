@@ -46,3 +46,31 @@ export function calcWeekDayDiff(today: number, workDays: number[]) {
   }
   return diff
 }
+
+
+export const DAYS_OF_WEEK = [
+  { value: "0", label: "Segunda-feira" },
+  { value: "1", label: "Terça-feira" },
+  { value: "2", label: "Quarta-feira" },
+  { value: "3", label: "Quinta-feira" },
+  { value: "4", label: "Sexta-feira" },
+  { value: "5", label: "Sábado" },
+  { value: "6", label: "Domingo" },
+]
+
+export const TIMEZONE_OPTIONS = [
+  { value: "America/Sao_Paulo", label: "Brasília (GMT-3)" },
+  { value: "America/Manaus", label: "Manaus (GMT-4)" },
+  { value: "America/Rio_Branco", label: "Rio Branco (GMT-5)" },
+  { value: "America/Fortaleza", label: "Fortaleza (GMT-3)" },
+]
+
+export   const DEFAULT_SCHEDULE = {
+  "0": { enabled: true, opens_at: "08:00", closes_at: "18:00" },
+  "1": { enabled: true, opens_at: "08:00", closes_at: "18:00" },
+  "2": { enabled: true, opens_at: "08:00", closes_at: "18:00" },
+  "3": { enabled: true, opens_at: "08:00", closes_at: "18:00" },
+  "4": { enabled: true, opens_at: "08:00", closes_at: "18:00" },
+  "5": { enabled: false, opens_at: "08:00", closes_at: "18:00" },
+  "6": { enabled: false, opens_at: "08:00", closes_at: "18:00" },
+}

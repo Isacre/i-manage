@@ -39,7 +39,7 @@ export default function Booking({ booking, fetch }: { booking: BookingType; fetc
       </h1>
       <p>{booking.service_name}</p>
       <p>{booking.employee_names?.join(", ")}</p>
-      <p>{booking.status}</p>
+ 
       {["PENDING", "CONFIRMED"].indexOf(booking.status ?? "") !== -1 && (
         <div className="flex items-center gap-2">
           <Button onClickFn={() => handleUpdatingBooking("CANCELED")} text={t("cancel")} />

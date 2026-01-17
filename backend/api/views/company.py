@@ -1,4 +1,5 @@
 from api.models.company import Company
+from api.models.company_schedule import CompanySchedule
 from rest_framework import viewsets
 from rest_framework.response import Response
 from api.serializers.company import CompanyRegisterSerializer, CompanySerializer
@@ -9,6 +10,7 @@ from django.db import transaction
 from typing import Dict, Any
 from rest_framework.request import Request
 from django.core.exceptions import ValidationError
+from datetime import time
 
 from users.models import User
 
@@ -28,8 +30,98 @@ class CompanyViewSet(viewsets.ModelViewSet):
             address=data['address'],
             timezone=data['timezone'],
         )
+        
+        # Salvar image e banner se fornecidos
+        if 'image' in data and data['image']:
+            company.image = data['image']
+        if 'banner' in data and data['banner']:
+            company.banner = data['banner']
+        company.save()
     
         return company
+    
+    def _parse_time(self, time_str: str) -> time:
+        """Converte string de hora para objeto time"""
+        if isinstance(time_str, time):
+            return time_str
+        if isinstance(time_str, str):
+            try:
+                # Tentar fromisoformat primeiro (formato HH:MM:SS)
+                return time.fromisoformat(time_str)
+            except ValueError:
+                # Se falhar, tentar parse manual (formato HH:MM)
+                parts = time_str.split(':')
+                return time(int(parts[0]), int(parts[1]))
+        return time(8, 0)  # Default
+    
+    def _create_company_schedules(self, company: Company, schedule_data: Dict[str, Any]) -> None:
+        """
+        Cria os horários individuais para cada dia da semana
+        schedule_data deve ser um dicionário com chaves '0'-'6' e valores contendo:
+        { enabled: bool, opens_at: str, closes_at: str }
+        """
+        if not schedule_data:
+            return
+        
+        for day_key, day_schedule in schedule_data.items():
+            try:
+                day_of_week = int(day_key)
+                if day_of_week < 0 or day_of_week > 6:
+                    continue
+                
+                enabled = day_schedule.get('enabled', False)
+                opens_at_str = day_schedule.get('opens_at', '08:00')
+                closes_at_str = day_schedule.get('closes_at', '18:00')
+                
+                opens_at = self._parse_time(opens_at_str)
+                closes_at = self._parse_time(closes_at_str)
+                
+                CompanySchedule.objects.create(
+                    company=company,
+                    day_of_week=day_of_week,
+                    enabled=enabled,
+                    opens_at=opens_at,
+                    closes_at=closes_at,
+                )
+            except (ValueError, KeyError) as e:
+                # Ignorar dias com formato inválido
+                continue
+    
+    def _update_company_schedules(self, company: Company, schedule_data: Dict[str, Any]) -> None:
+        """
+        Atualiza ou cria os horários individuais para cada dia da semana
+        schedule_data deve ser um dicionário com chaves '0'-'6' e valores contendo:
+        { enabled: bool, opens_at: str, closes_at: str }
+        """
+        if not schedule_data:
+            return
+        
+        for day_key, day_schedule in schedule_data.items():
+            try:
+                day_of_week = int(day_key)
+                if day_of_week < 0 or day_of_week > 6:
+                    continue
+                
+                enabled = day_schedule.get('enabled', False)
+                opens_at_str = day_schedule.get('opens_at', '08:00')
+                closes_at_str = day_schedule.get('closes_at', '18:00')
+                
+                opens_at = self._parse_time(opens_at_str)
+                closes_at = self._parse_time(closes_at_str)
+                
+                # Atualizar ou criar o schedule
+                schedule, created = CompanySchedule.objects.update_or_create(
+                    company=company,
+                    day_of_week=day_of_week,
+                    defaults={
+                        'enabled': enabled,
+                        'opens_at': opens_at,
+                        'closes_at': closes_at,
+                    }
+                )
+            except (ValueError, KeyError) as e:
+                # Ignorar dias com formato inválido
+                continue
 
     def _create_user(self, data: Dict[str, Any], company: Company) -> User:
         return User.objects.create(
@@ -60,6 +152,9 @@ class CompanyViewSet(viewsets.ModelViewSet):
                 """ 
                 User already has an account but doesn't have a company
                 """
+                # Extrair schedule antes de validar o serializer
+                schedule_data = data.pop('schedule', None)
+                
                 try:
                     user = User.objects.get(email=data['email'])
                     if user.company:
@@ -72,14 +167,30 @@ class CompanyViewSet(viewsets.ModelViewSet):
                     serializer = self.get_serializer_class()(data=data)
                     
                     if serializer.is_valid(raise_exception=True):
+                        # Processar keywords se fornecido
+                        if 'keywords' in data:
+                            company.keywords = data['keywords']
                         company.save()
+                        
+                        # Criar horários individuais se fornecido
+                        if schedule_data:
+                            self._create_company_schedules(company, schedule_data)
+                        
                         user.company = company
                         user.save()
                 except User.DoesNotExist:
                     company = self._create_company(data)
                     serializer = self.get_serializer_class()(data=data)
                     if serializer.is_valid(raise_exception=True):
+                        # Processar keywords se fornecido
+                        if 'keywords' in data:
+                            company.keywords = data['keywords']
                         company.save()
+                        
+                        # Criar horários individuais se fornecido
+                        if schedule_data:
+                            self._create_company_schedules(company, schedule_data)
+                        
                         user = self._create_user(data, company)
                         user.save()
                 
@@ -109,6 +220,27 @@ class CompanyViewSet(viewsets.ModelViewSet):
             return Response({"message": "Company not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"message": "Company could not be found", "errors": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+        """Sobrescreve partial_update para processar schedule"""
+        instance = self.get_object()
+        data = request.data.copy()
+        
+        # Extrair schedule antes de validar o serializer
+        # Aceita tanto 'schedule' quanto 'schedule_data' para compatibilidade
+        schedule_data = data.pop('schedule', None) or data.pop('schedule_data', None)
+        
+        # Atualizar a company normalmente
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        
+        # Atualizar schedules se fornecido
+        if schedule_data is not None:
+            with transaction.atomic():
+                self._update_company_schedules(instance, schedule_data)
+        
+        return Response(serializer.data)
     
     """
     Upload a logo, save it in the files folder and return the url

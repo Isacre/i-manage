@@ -2,7 +2,7 @@ import { useCompanyStore } from "@/stores/company-store"
 import FormFields from "@/components/formFields"
 import React from "react"
 import { CompanyType, WeekDays } from "@/types"
-import WorkDaysToggle from "./weekDaysToggle"
+import WorkDaysSchedule from "./workDaysSchedule"
 
 export default function CompanyFormFields() {
   const { company, update } = useCompanyStore()
@@ -38,7 +38,7 @@ export default function CompanyFormFields() {
         autoComplete="off"
       />
       <div className="col-span-full w-full">
-        <WorkDaysToggle />
+        <WorkDaysSchedule />
       </div>
     </div>
   )

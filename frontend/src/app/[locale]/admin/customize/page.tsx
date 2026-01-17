@@ -12,7 +12,7 @@ import { toast } from "react-toastify"
 
 export default function CustomizeCompany() {
   const t = useTranslations("Admin.Customize")
-  const company = useCompanyStore((state) => state.company)
+  const { company, update } = useCompanyStore()
 
   const {
     formState: { errors },
@@ -42,8 +42,10 @@ export default function CustomizeCompany() {
       banner: company?.banner,
       image: company?.image,
       work_days: company?.work_days,
+      schedule: company?.schedule,
     })
-      .then(() => {
+      .then((updatedCompany) => {
+        update(updatedCompany)
         toast.success(t("success"))
       })
       .catch(() => {
@@ -76,8 +78,8 @@ export default function CustomizeCompany() {
         </button>
       </div>
       <div className="flex flex-col gap-4 p-2">
-        <CompanyFormFields />
         <Preview />
+        <CompanyFormFields />
       </div>
     </div>
   )
