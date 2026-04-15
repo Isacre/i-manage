@@ -5,10 +5,9 @@ from drf_yasg import openapi
 
 from .views import (
     company, 
-    booking, 
-    employee,
     service,
     files,
+    healthcheck,
 )
 from rest_framework import permissions
 from users.views import CustomUserViewSet
@@ -35,18 +34,6 @@ router.register(
 )
 
 router.register(
-    r"employee",
-    employee.EmployeeViewSet,
-    basename="employee"
-)
-
-router.register(
-    r"booking",
-    booking.BookingViewSet,
-    basename="booking"
-)
-
-router.register(
     r"service",
     service.ServiceViewSet,
     basename="service"
@@ -63,4 +50,5 @@ urlpatterns = [
     path('auth/users/', CustomUserViewSet.as_view({'post': 'create'}), name='user-create'),
     re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.jwt')),
+    path('healthcheck/', healthcheck.HealthCheckView.as_view(), name='healthcheck'),
 ]

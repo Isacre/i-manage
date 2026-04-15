@@ -1,13 +1,6 @@
-import array
-from collections import defaultdict
 from datetime import datetime, timedelta
 import pytz
-from typing import List
-from api.models.booking import Booking, BookingStatus
-from api.models.employee import Employee
-from api.models.service import Service
-from api.serializers.booking import BookingSerializer
-from api.serializers.service import ServiceSerializer
+
 
 def translateDateToRFC3339(date: str):
     fuso_brasil = pytz.timezone("America/Sao_Paulo")
@@ -31,7 +24,7 @@ def generateBookedHours(start, end, interval):
     booked_hours.append(start.strftime("%H:%M"))
   return booked_hours
 
-def filter_available_employees_for_slot(employee_ids, service_id, start_datetime_str):
+""" def filter_available_employees_for_slot(employee_ids, service_id, start_datetime_str):
     service = Service.objects.get(id=service_id)
     service_duration = int(service.max_duration)
     start_datetime = datetime.fromisoformat(start_datetime_str)
@@ -53,8 +46,8 @@ def filter_available_employees_for_slot(employee_ids, service_id, start_datetime
     print("busy_employee_ids", busy_employee_ids)
     available_employees = [eid for eid in employee_ids if eid not in busy_employee_ids]
     print("available_employees", available_employees)
-    return available_employees
-
+    return available_employees """
+""" 
 def select_most_available_employee(service_id, start_date, end_date, date_parameter):
     datetime_start = start_date.datetime
     datetime_end = end_date.datetime  
@@ -84,9 +77,9 @@ def select_most_available_employee(service_id, start_date, end_date, date_parame
 
     return sorted_employees[0]
 
+ """
 
-
-def check_employee_availability(employee_id, start_date, end_date):
+""" def check_employee_availability(employee_id, start_date, end_date):
     bookings = Booking.objects.filter(
         employees__id=employee_id,
         start_date__lt=str(end_date),
@@ -95,3 +88,4 @@ def check_employee_availability(employee_id, start_date, end_date):
     )
     print("bookings", BookingSerializer(bookings, many=True).data)
     return not bookings.exists()
+ """

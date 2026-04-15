@@ -3,7 +3,6 @@ from api.models.base_model import BaseModel
 from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
 import pytz 
-from django.core.validators import FileExtensionValidator
 
 def get_default_work_days():
     return [0, 1, 2, 3, 4]

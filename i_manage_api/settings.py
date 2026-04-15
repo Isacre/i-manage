@@ -14,9 +14,6 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env.bool("DEBUG")
 ALLOWED_HOSTS = ["*"]
 
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 DOMAIN = env("DOMAIN") 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -27,7 +24,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'payments.apps.PaymentsConfig',
     'i_manage_api',
     'rest_framework',
     'corsheaders',
@@ -69,18 +65,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'i_manage_api.wsgi.application'
 
 
-""" if env("DATABASE_URL"): """
-""" else:
-    DATABASES = {
-        "default": {        
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": DATABASE_NAME,
-            "USER": DATABASE_USER,
-            "PASSWORD": DATABASE_PASS,
-            "HOST": DATABASE_HOST,
-            "PORT": DATABASE_PORT,
-        }
-    } """
 DATABASES = {
     "default": dj_database_url.config(default=env("DATABASE_URL"))
 }

@@ -3,7 +3,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from api.models.service import Service
-from api.serializers.service import PatchCapableEmployeesSerializer, ServiceSerializer
+from api.serializers.service import  ServiceSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 class ServiceViewSet(viewsets.ModelViewSet):
@@ -12,13 +12,9 @@ class ServiceViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        if self.request.method == "PATCH":
-            return self.queryset
         return self.queryset.filter()
     
     def get_serializer_class(self):
-        if self.request.method == "PATCH":
-            return PatchCapableEmployeesSerializer
         return ServiceSerializer
     
     identifier_param = openapi.Parameter(

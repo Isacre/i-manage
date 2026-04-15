@@ -9,7 +9,13 @@ __pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media
+# MEDIA_ROOT: ignore API uploads (hashed filenames), keep bundled defaults tracked
+i_manage_api/media/company_images/*
+!i_manage_api/media/company_images/default_company_image.png
+!i_manage_api/media/company_images/autoshine_logo.png
+i_manage_api/media/company_banners/*
+!i_manage_api/media/company_banners/default_company_banner.jpg
+!i_manage_api/media/company_banners/autoshine_banner.jpg
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.

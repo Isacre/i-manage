@@ -1,0 +1,53 @@
+""" import stripe
+from django.conf import settings
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def create_checkout_session(store_identifier: str,service_name: str, service_description: str, amount: int, customer_email: str, metadata: dict = {}):
+    subroute = f"http://{store_identifier}.{settings.DOMAIN}"
+    print(subroute, "subroute")
+    print(settings.DOMAIN, "domain")
+   
+    try:
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": "brl",
+                    "product_data": {
+                        "name": service_name,
+                        "description": service_description,
+                    },
+                    "unit_amount": int(amount * 100),  # em centavos
+                },
+                "quantity": 1,
+            }],
+            mode="payment",
+            customer_email=customer_email,
+            success_url=f"{subroute}/bookings/success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{subroute}/bookings/cancel",
+            metadata=metadata,
+        )
+        return session
+    except Exception as e:
+        raise e
+
+def verify_checkout_session(session_id: str):
+    try:
+        session = stripe.checkout.Session.retrieve(session_id, expand=["payment_intent"])
+        payment_intent = session.payment_intent
+
+        # Check payment status
+        if payment_intent and payment_intent["status"] == "succeeded":
+            return {"valid": True, "session": session}
+        else:
+            return {"valid": False, "session": session}
+    except Exception as e:
+        return {"valid": False, "error": str(e)}
+    
+def refund_payment(payment_id):
+    try:
+        refund = stripe.Refund.create(payment_intent=payment_id)
+        return refund
+    except Exception as e:
+        return {"error": str(e)} """
